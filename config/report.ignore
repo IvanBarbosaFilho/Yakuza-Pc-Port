@@ -1,0 +1,6 @@
+# Known-harmless messages for ps2xRecomp/tools/runreport.py (one regex per line, say why).
+# The game first looks for loose map files under \BG\ (a development layout); the retail disc has
+# them only inside X3/*.MFA archives, which it then reads. Fails on a real PS2 too.
+sceCdSearchFile failed.*\\BG\\
+# Overlay code regions the analyzer reports and the runtime skips on purpose.
+Ignoring invalid code region

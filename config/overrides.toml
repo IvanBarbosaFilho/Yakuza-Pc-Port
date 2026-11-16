@@ -1,0 +1,27 @@
+# Yakuza: per-game recompiler overrides (stubs, extra entry points, forced recompiles), merged into config/yakuza.toml.
+[general]
+force_recompile = [
+  # libsdr (EE side of SDRDRV.IRX) as guest code, as in Silent Hill 2: its sceSdRemote calls reach the real SDRDRV
+  # on the IOP. As HLE (Stubs/Audio.cpp) sceSdVoiceTrans only reported success: the sound banks never reached SPU2
+  # RAM and every voice (effects, sequenced music) decoded silence (2026-11-14, PS2X_TRACE_SPU2_STATS).
+  "sceSdRemoteInit@0x00111490",
+  "sceSdRemote@0x001115E8",
+  # MPEG movies: the game's own libmpeg/libipu drive the runtime's IPU device (ps2_ipu.cpp), as in Berserk, Rule of
+  # Rose and Silent Hill 2. Bound to the HLE by name, sceMpegGetPicture waited for bitstream from the HLE feed while
+  # the game's toIPU DMA (ch4 chain of REF tags, MPEG-2 ES from OGRE2.CVM) went to the IPU device: no IPU command
+  # was ever issued and the opening movie stayed black after the memory card dialog.
+  "sceMpegCreate@0x0012CFD8",
+  "sceMpegInit@0x0012DB80",
+  "sceMpegAddBs@0x0012DC38",
+  "sceMpegGetPicture@0x0012DC78",
+  "sceMpegGetPictureRAW8@0x0012DCC0",
+  "sceMpegReset@0x0012DD18",
+  "sceMpegGetDecodeMode@0x0012DDD0",
+  "sceMpegAddCallback@0x0012DDF0",
+  "sceMpegClearRefBuff@0x0012DFA8",
+  "_sceMpegFlush@0x0012EC48",
+  "sceIpuStopDMA@0x0012F950",
+  "sceIpuRestartDMA@0x0012FA38",
+  "sceIpuSync@0x0012FB88",
+  "sceIpuInit@0x0012FC68",
+]

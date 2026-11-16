@@ -1,0 +1,56 @@
+# Yakuza (SLUS_213.48) for the city tools (PS2Recomp ps2xRecomp/tools/city/): inputs, string rules and anchors.
+# The game code is MAIN.BIN's overlay ovl_main (0x167c80); common/tools/city_overlay.py puts it and the boot ELF in
+# one image with plain addresses (logs/city/ovl_main.elf, facts_ovl_main.jsonl). Category names follow the SH3 maps
+# (sh3-mods' PC city map) where they exist; Yakuza adds battle, minigame, event, items.
+# 314 functions name their source file in assert messages ("...\xxx.cpp"): the rules below map those files first
+# (proof of origin), then other strings. srcfiles.py spreads the files over link order (logs/city/srcfiles.tsv).
+#
+#   cd yakuza && ./nixsh tools/city.sh        (prepare + every tool, a few minutes)
+
+[paths]
+elf = "../logs/city/ovl_main.elf"
+facts = "../logs/city/facts_ovl_main.jsonl"
+oracle = "../../refs/OpenHuey/tools"          # difftest.py: R5900 interpreter for math proofs
+coact = "../logs/coact*.tsv"                  # runtime PS2X_COACT files (coact.py)
+out = "../logs/city"
+
+# ---- by source file (assert strings: "<path>\<file>.cpp"), most specific first ----
+[category.cinematic]
+strings = '(?i)\b(trtmovie|moviewindow|trtcinescope)\.cpp|\.sfd\b|\.pss\b'
+[category.save]
+strings = '(?i)\b(trtmemcard|memcardwindow)\.cpp|icon\.sys|BASLUS|SLUS-21348'
+[category.sound]
+strings = '(?i)\btrtsound\.cpp|\badxf|getvolume|\.adx\b|\.afs\b'
+[category.files]
+strings = '(?i)\b(trtfile\w*|trthdd|media|trtpreloadstage)\.cpp|\brofs_|\bpfs_|cvfs|\.cvm\b|cdrom0:|filelist'
+[category.minigame]
+strings = '(?i)\b(cse\w*|msgbet\w*|msgchip|msgbuychip|msgten|coin_locker)\.cpp|minigame'
+[category.battle]
+strings = '(?i)\b(tournament|arrowbtl|battlestartcaption)\.cpp|tougi'
+[category.menu]
+strings = '(?i)\b(pausemenu\w*|pausedraw|pausemanager|selectpausemenuman|\w+window|staffroll|segmentpic\d?|ultimatebox)\.cpp'
+[category.text]
+strings = '(?i)\b(msg\w*|talkmgr|advinfomsg|evtinfomsg|cellulartalkmsg|communication|cellular)\.cpp|pmsgdata'
+[category.effects]
+strings = '(?i)\b(effect\w*|stagebloodnew|permanenteffect|stopeffect\w*|paletteanimation\w*|environmentmanager)\.cpp|\beff_'
+[category.camera]
+strings = '(?i)\b(game)?camera\.cpp|\.cam\b'
+[category.models]
+strings = '(?i)\b(humanmanager|productionchara|yact)\.cpp|^(n_(suit|shirt|jaka|nisiki|teamer)|mus_suit|cava_|ojisan|gyh_|gjh_|debu_suit)'
+[category.map]
+strings = '(?i)\b(map|cstageobjectmanager|stageobject\w*|teststage|individualobj)\.cpp|^st_kab'
+[category.event]
+strings = '(?i)\b(authoringcommon|eventplay\w*|eventmanager|eventselect|sequence)\.cpp|st_auth|ewb_scinario|emb_scinario'
+[category.progress]
+strings = '(?i)\b(mission\w*|scenario\w*|tutorial|cleared_result|advertise|profile)\.cpp|eactid_mission'
+[category.items]
+strings = '(?i)\bitem\.cpp'
+[category.flow]
+strings = '(?i)\b(libmain|root|trtsystem)\.cpp'
+[category.render]
+strings = '(?i)\b(trtsortpolygon|trtonesheet|spritedraw|testshadowmap|widetvmanager)\.cpp|shadow|texture'
+[category.memory]
+strings = '(?i)not enough (memory|heap)|heap (over|full|broken)'
+
+# areas.py: functions anchored by the data they own or by being known functions (confirmed facts only).
+# None yet: add [areas.<name>] tables as the game is mapped (format: config/city.toml of sh3b).
