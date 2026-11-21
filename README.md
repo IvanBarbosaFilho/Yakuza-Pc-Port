@@ -34,6 +34,7 @@ resolutions and a sharp picture.
   own cameras
 - Keyboard and mouse (mouse buttons attack / grab), Xbox, PlayStation and other controllers
 - Fullscreen (F11), memory card saves next to the game
+- Support for the .zip of yakuza Restored, for japanese audio
 
 ## Download and play
 
